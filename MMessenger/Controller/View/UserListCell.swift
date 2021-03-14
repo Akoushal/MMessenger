@@ -14,6 +14,7 @@ class UserListCell: UITableViewCell {
     static let TopAnchorConstant: CGFloat = 25
     static let BottomAnchorConstant: CGFloat = 25
     static let WidthConstant: CGFloat = 200
+    static let UserImageSizeConstant: CGFloat = 50
     
     lazy var userName: UILabel = {
         let lbl = UILabel()
@@ -22,17 +23,27 @@ class UserListCell: UITableViewCell {
         return lbl
     }()
     
+    lazy var userImageView: UIImageView = {
+        let imgV = UIImageView()
+        imgV.translatesAutoresizingMaskIntoConstraints = false
+        return imgV
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .gray
+        accessoryType = .disclosureIndicator
         // Add the UI components
+        contentView.addSubview(userImageView)
         contentView.addSubview(userName)
         
         NSLayoutConstraint.activate([
-            userName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UserListCell.LeadingAnchorConstant),
-            userName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UserListCell.TopAnchorConstant),
-            userName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UserListCell.BottomAnchorConstant),
+            userImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UserListCell.LeadingAnchorConstant),
+            userImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UserListCell.TopAnchorConstant),
+            userImageView.widthAnchor.constraint(equalToConstant: UserListCell.UserImageSizeConstant),
+            userImageView.heightAnchor.constraint(equalToConstant: UserListCell.UserImageSizeConstant),
+            
+            userName.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: UserListCell.LeadingAnchorConstant),
+            userName.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor),
             userName.widthAnchor.constraint(equalToConstant: UserListCell.WidthConstant)
         ])
     }
@@ -42,9 +53,11 @@ class UserListCell: UITableViewCell {
     }
     
     func configure(with user: User?) {
-        if let user = user {
-            userName.text = user.login
+        if let avatarUrl = user?.avatarUrl {
+            userImageView.downloaded(from: avatarUrl)
+        }
+        if let user = user, let username = user.login?.capitalized {
+            userName.text = "@\(username)"
         }
     }
 }
-

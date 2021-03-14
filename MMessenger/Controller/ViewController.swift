@@ -30,7 +30,7 @@ class ViewController: UIViewController, AlertDisplayer {
         tableView.separatorStyle = .none
         tableView.separatorColor = .gray
         tableView.register(UserListCell.self, forCellReuseIdentifier: CellIdentifiers.list)
-        tableView.rowHeight = 200
+        tableView.rowHeight = 100
         return tableView
     }()
     
@@ -51,8 +51,12 @@ class ViewController: UIViewController, AlertDisplayer {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     private func setUpUI() {
-        title = "Users"//Constants.ManufacturersTitle
+        title = "GitHub DM"
         view.addSubview(usersListTableView)
         view.addSubview(activityIndicator)
         usersListTableView.edgesAnchorEqualTo(destinationView: view).activate()
@@ -89,9 +93,9 @@ extension ViewController: UITableViewDataSourcePrefetching {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let carModelVC = CarModelViewController()
-//        carModelVC.manufacturer = viewModel.manufacturer(at: indexPath.row)
-//        navigationController?.pushViewController(carModelVC, animated: true)
+        let chatVC = ChatViewController()
+        chatVC.user = viewModel.user(at: indexPath.row)
+        navigationController?.pushViewController(chatVC, animated: true)
     }
 }
 

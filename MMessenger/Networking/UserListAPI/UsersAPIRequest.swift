@@ -20,7 +20,7 @@ struct UsersAPIRequest {
 
 extension UsersAPIRequest {
     static func parameterizedRequest() -> UsersAPIRequest {
-        let defaultParameters = ["accept": "application/vnd.github.v3+json", "per_page": "\(100)"]
+        let defaultParameters = ["accept": "application/vnd.github.v3+json", "per_page": "\(10)"]
         return UsersAPIRequest(parameters: defaultParameters)
     }
 }
